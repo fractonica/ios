@@ -89,7 +89,7 @@ you where everything is and what you must not break. Read it before the code.
 
 ```
 ios/
-  AGENTS.md  README.md  .gitignore
+  AGENTS.md  README.md (the GitHub front page)  LICENSE  .gitignore
   project.yml                 XcodeGen: the source of truth. Fractonica.xcodeproj is generated, git-ignored
   FractonicaKit/              Swift package: the thin Swift face of ../core            (section 3)
     Package.swift             depends on .package(path: "../../core"), product CFractonica
@@ -102,7 +102,7 @@ ios/
   AppUITests/                 UI tests: the running app driven through its accessibility elements
   Tools/                      build.sh  test-kit.sh  test-app.sh  test-ui.sh  snapshot.sh
                               simulator-shots.sh  icon.sh  simulator-id.sh
-  docs/                       the README's pictures: overview.png, icon.png, screens/ (curated snapshots)
+  docs/                       GUIDE.md (the long README) and its pictures: hero.jpg (README), overview.png, icon.png, screens/ (curated snapshots)
   build/                      git-ignored: DerivedData, snapshots, screenshots, build logs
 ```
 
@@ -206,7 +206,7 @@ The kit contains **no arithmetic of its own**. A file wraps one corner of
   the C function in the doc comment, add a row here and a test.
 - A C enum stored in a `uint8_t` struct field needs a cast
   (`frc_unit_t(UInt32(part.unit))`); function-like macros and `FRC_TIME_NONE`
-  are not imported (see `../core/README.md`, "Apple platforms").
+  are not imported (see `../core/docs/GUIDE.md`, "Apple platforms").
 - `Arc.pi` is the core's `FRC_PI`. Swift's `Float.pi` is one float lower, and a
   carrier built from it does not divide the way the core expects: build
   carriers with `Arc.fullCircle`.
@@ -646,7 +646,7 @@ core's new functions adopted, the mode toggle's hit frame fixed):
   WAVE in both modes. The drift reads `−6 235λ` on NOW and WAVE, the
   ladder's captions `sub-Blink · …` fit their rows, the Earth texts read as
   before (`THU 8 OCT 2026 · 12:00:00 UTC`, `12:56:12 · 56 min 12 s`, `9 OCT
-  01:34:05`). The README's pictures (`docs/overview.png`, `docs/screens/`)
+  01:34:05`). The guide's pictures (`docs/overview.png`, `docs/screens/`)
   were redrawn from these snapshots, except the iPad and Mac-window
   captures (`ipad-now-earth.png`, `mac-window-*.png`), which are stage 6's
   and still show the drift as `−2η 23ι`.
@@ -692,7 +692,7 @@ control of the desktop):
 - On the simulator by a UI test: the pinch and the twist (their arbitration
   is unit-tested only), a tap on a counter ring, the tumblers, "go to", the
   ladder's long press and its refusal, the ladder's wheel and spine.
-- VoiceOver itself, Reduce Motion, iPad Split View, a physical device.
+- VoiceOver itself, Reduce Motion, iPad Split View. (The owner has run the app by hand on a physical iPhone, 2026-11-13; no automated test has run on a device.)
 - CPU after the nest cache: not measured again (stage 5: about 29 % of a
   core at focus 12, 4 to 5 % at the Helion).
 

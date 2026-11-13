@@ -221,4 +221,4 @@ return to NOW, and on an iPad turn it on its side.
 
 ## Licence
 
-Not chosen yet: all rights reserved until the owner picks one.
+Apache License 2.0. See [LICENSE](../LICENSE).

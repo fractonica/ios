@@ -95,4 +95,4 @@ untested.
 
 ## Licence
 
-No licence has been chosen yet. All rights reserved; see [LICENSE](LICENSE).
+Licensed under the [Apache License 2.0](LICENSE).

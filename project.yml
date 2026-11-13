@@ -1,0 +1,127 @@
+# project.yml — the source of truth for the Xcode project (XcodeGen).
+#
+#   xcodegen generate            (Tools/build.sh does it for you)
+#
+# Fractonica.xcodeproj is GENERATED and git-ignored: never edit it, edit this.
+# One multiplatform SwiftUI app target (iPhone, iPad, Mac) on top of the local
+# Swift package FractonicaKit, which wraps the C core in ../core.
+
+name: Fractonica
+
+options:
+  bundleIdPrefix: org.fractonica
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+packages:
+  FractonicaKit:
+    path: FractonicaKit
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEAD_CODE_STRIPPING: YES
+
+targets:
+  Fractonica:
+    type: application
+    supportedDestinations: [iOS, macOS]
+    sources:
+      - path: App
+        excludes:
+          - "**/.gitkeep"
+    dependencies:
+      - package: FractonicaKit
+        product: FractonicaKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.fractonica.clock
+        PRODUCT_NAME: Fractonica
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Fractonica
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        # The keys build settings cannot express (the launch screen's colour)
+        # are in App/Resources/Info.plist and merged with the generated ones.
+        INFOPLIST_FILE: App/Resources/Info.plist
+        # The icon is drawn by the instrument itself: Tools/icon.sh.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # iOS: portrait on the phone (the phone layout is a portrait
+        # instrument), every orientation on the iPad. The iPad allows Split
+        # View and Slide Over: a narrow part gets the phone arrangement
+        # (LayoutClass.fitting), a wide one the desktop.
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        # The Mac build is signed ad hoc ("Sign to Run Locally"); the simulator
+        # build is made with CODE_SIGNING_ALLOWED=NO (Tools/build.sh).
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        # No sandbox: snapshot mode writes PNG files to the directory it is given.
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        ENABLE_PREVIEWS: NO
+
+  FractonicaTests:
+    type: bundle.unit-test
+    supportedDestinations: [macOS]
+    sources:
+      - path: AppTests
+    dependencies:
+      - target: Fractonica
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.fractonica.clock.tests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Fractonica.app/Contents/MacOS/Fractonica"
+
+  # Drives the running app as a person would (Tools/test-ui.sh): turns the
+  # limb, toggles the mode, opens each screen, scrubs the wave, returns to NOW.
+  FractonicaUITests:
+    type: bundle.ui-testing
+    supportedDestinations: [iOS, macOS]
+    sources:
+      - path: AppUITests
+    dependencies:
+      - target: Fractonica
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.fractonica.clock.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        TEST_TARGET_NAME: Fractonica
+
+schemes:
+  FractonicaUITests:
+    build:
+      targets:
+        Fractonica: all
+        FractonicaUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - FractonicaUITests
+  Fractonica:
+    build:
+      targets:
+        Fractonica: all
+        FractonicaTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - FractonicaTests
